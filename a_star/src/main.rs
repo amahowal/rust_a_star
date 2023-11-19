@@ -7,5 +7,6 @@ fn main() {
     occu_grid.add_obstacles();
 
     // Find a way through
+    crate::a_star::aStarPlan(&occu_grid);
 }
 
