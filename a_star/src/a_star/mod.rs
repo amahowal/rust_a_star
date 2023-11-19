@@ -41,13 +41,13 @@ fn generate_successor_nodes(active_node: &Node) -> Vec<Node> {
         if idx == 0 || idx == 3 || idx == 5 {
             next_node.i = active_node.i + 1;
         } else if idx == 2 || idx == 4 || idx == 7 {
-            next_node.i = active_node.i - 1;
+            next_node.i = active_node.i.checked_sub(1).unwrap_or(0);
         }
         // j
         if idx == 0 || idx == 1 || idx == 2 {
             next_node.j = active_node.j + 1;
         } else if idx == 5 || idx == 6 || idx == 7 {
-            next_node.j = active_node.j - 1;
+            next_node.j = active_node.j.checked_sub(1).unwrap_or(0);
         }
         // g
         if idx == 0 || idx == 2 || idx == 5 || idx == 7 {
@@ -66,7 +66,7 @@ fn generate_successor_nodes(active_node: &Node) -> Vec<Node> {
 //     1. Out of bounds
 //     2. In the open set
 //     3. In the closed set
-fn is_valid(dims: &(u32, u32), open_nodes: &Vec<Node>, closed_nodes: &Vec<Node>) -> bool {
+fn is_valid(active_node: &Node, grid_dims: &(u32, u32), open_nodes: &Vec<Node>, closed_nodes: &Vec<Node>) -> bool {
     // make sure the successor nodes aren't out of bounds
     // make sure the successor nodes aren't in the open set
     // make sure the successor nodes aren't in the closed set
@@ -103,7 +103,11 @@ pub fn aStarPlan(grid: &crate::occupancy_grid::OccuGrid) -> u32 {
             // generate successor nodes
             let mut successor_nodes = generate_successor_nodes(&active_node);
             // loop around successor nodes and add them to the open nodes if valid and not goal
-            open_nodes.append(&mut successor_nodes);
+            for node in successor_nodes {
+                if is_valid(&node, &(grid.width, grid.length), &open_nodes, &open_nodes) {
+                    open_nodes.push(node);
+                }
+            }
         }
     }
     // TODO: how to return a number or a failure? return an error probably?
