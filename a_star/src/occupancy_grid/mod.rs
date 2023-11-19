@@ -23,11 +23,13 @@ impl OccuGrid {
         let ulength = usize::try_from(length).unwrap();
         // Creating the actual grid instance
         let mut grid : Grid<u8> = Grid::new(uwidth,ulength);
-        println!("The width is {width}");
-        println!("The length is {length}");
+        //println!("The width is {width}");
+        //println!("The length is {length}");
+
         // Fill the grid with zeros
         grid.fill(0);
         // Returns the OccuGrid
+        println!("Created a grid full of zeros of width {width} and length {length}");
         Self { width: width, length: length, obstacle_count: 0, grid: grid}
     }
     pub fn add_obstacles(&mut self) {
@@ -35,9 +37,10 @@ impl OccuGrid {
         for cell in self.grid.iter_mut() {
             *cell = rand::thread_rng().gen_range(1..=100);
         }
-        // Print stuff out from the grid
-        for ((row, col), i) in self.grid.indexed_iter() {
-            println!("value at row {row} and column {col} is: {i}");
-        }
+        println!("Filled the grid with random values between 1 and 100!");
+        // TODO: implement display for the grid Print stuff out from the grid
+        //for ((row, col), i) in self.grid.indexed_iter() {
+        //    println!("value at row {row} and column {col} is: {i}");
+        //}
     }
 }
